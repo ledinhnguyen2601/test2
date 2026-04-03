@@ -2,6 +2,7 @@
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BQL Chung Cư</title>
     <link rel="stylesheet" href="css/style.css" />
     <link
@@ -27,6 +28,11 @@
             >
           </li>
           <li>
+            <a href="#" onclick="switchTab('tab-hoadon', this)"
+              ><i class="fas fa-file-invoice-dollar"></i> Quản lý Hóa Đơn</a
+            >
+          </li>
+          <li>
             <a href="#" onclick="switchTab('tab-baohong', this)"
               ><i class="fas fa-wrench"></i> Yêu cầu hỗ trợ</a
             >
@@ -39,12 +45,12 @@
             Hệ thống Tòa nhà
           </h2>
           <div style="display: flex; align-items: center; gap: 15px">
-            <span id="admin-name" style="font-weight: 600; font-size: 0.9rem"
+            <span id="admin-name" style="font-weight: 600; font-size: 1rem"
               >BQL Admin</span
             >
             <button
               class="btn btn-outline logout-btn"
-              style="padding: 5px 10px; font-size: 0.85rem; width: auto"
+              style="padding: 5px 10px; font-size: 0.9rem; width: auto"
             >
               Đăng xuất
             </button>
@@ -55,20 +61,22 @@
           <div id="tab-cudan" class="content-section">
             <div
               class="card"
-              style="
-                margin-bottom: 20px;
-                background: var(--bg-light);
-                border: 1px dashed #0f766e;
-              "
+              style="background: var(--bg-light); border: 1px dashed #0f766e"
             >
               <h3 style="margin-bottom: 15px; color: #0f766e">
                 <i class="fas fa-user-plus"></i> Thêm Cư Dân Mới
               </h3>
-              <div style="display: flex; gap: 15px">
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                  gap: 15px;
+                "
+              >
                 <input
                   type="text"
                   id="new-res-room"
-                  placeholder="Căn hộ (VD: 301)"
+                  placeholder="Căn hộ (VD: 111)"
                 />
                 <input type="text" id="new-res-name" placeholder="Tên chủ hộ" />
                 <input
@@ -114,7 +122,6 @@
             <div
               class="card"
               style="
-                margin-bottom: 20px;
                 background: var(--bg-light);
                 border: 1px dashed var(--primary-color);
               "
@@ -125,14 +132,14 @@
               <div
                 style="
                   display: grid;
-                  grid-template-columns: 1fr 1fr 1fr;
+                  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
                   gap: 15px;
                 "
               >
                 <input
                   type="text"
                   id="new-veh-room"
-                  placeholder="Căn hộ (VD: 301)"
+                  placeholder="Căn hộ (VD: 111)"
                 />
                 <input
                   type="text"
@@ -180,11 +187,79 @@
             </div>
           </div>
 
+          <div id="tab-hoadon" class="content-section" style="display: none">
+            <div
+              class="card"
+              style="background: var(--bg-light); border: 1px dashed #d97706"
+            >
+              <h3 style="margin-bottom: 15px; color: #d97706">
+                <i class="fas fa-plus-circle"></i> Phát Hóa Đơn Tháng Này
+              </h3>
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                  gap: 15px;
+                "
+              >
+                <div>
+                  <label>Căn hộ</label
+                  ><input type="text" id="bill-room" placeholder="VD: 111" />
+                </div>
+                <div>
+                  <label>Phí quản lý (VNĐ)</label
+                  ><input
+                    type="number"
+                    id="bill-fee"
+                    placeholder="VD: 300000"
+                  />
+                </div>
+                <div>
+                  <label>Phí gửi xe (VNĐ)</label
+                  ><input
+                    type="number"
+                    id="bill-parking"
+                    placeholder="VD: 100000"
+                  />
+                </div>
+              </div>
+              <button
+                id="btnCreateBill"
+                class="btn btn-primary"
+                style="background: #d97706; width: auto"
+              >
+                Phát Hóa Đơn
+              </button>
+            </div>
+
+            <div class="card">
+              <h3 style="margin-bottom: 15px">Lịch sử Phát Hóa Đơn</h3>
+              <div class="table-responsive">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Căn hộ</th>
+                      <th>Ngày phát</th>
+                      <th>Tổng tiền</th>
+                      <th>Trạng thái</th>
+                      <th>Thao tác</th>
+                    </tr>
+                  </thead>
+                  <tbody id="bills-tbody">
+                    <tr>
+                      <td colspan="5" style="text-align: center">
+                        Đang kéo dữ liệu...
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
           <div id="tab-baohong" class="content-section" style="display: none">
             <div class="card">
-              <h3 style="margin-bottom: 15px">
-                Yêu cầu hỗ trợ từ Cư dân (Realtime)
-              </h3>
+              <h3 style="margin-bottom: 15px">Yêu cầu hỗ trợ từ Cư dân</h3>
               <div class="table-responsive">
                 <table>
                   <thead>
@@ -241,21 +316,21 @@
         loadReports();
         loadResidents();
         loadVehicles();
+        loadBills(); // Load hóa đơn
       });
 
       document
         .querySelector(".logout-btn")
         .addEventListener("click", () => signOut(auth));
 
-      // --- QUẢN LÝ CƯ DÂN ---
+      // --- CÁC HÀM CŨ GIỮ NGUYÊN ---
       document
         .getElementById("btnAddResident")
         .addEventListener("click", async () => {
-          const room = document.getElementById("new-res-room").value;
-          const name = document.getElementById("new-res-name").value;
-          const phone = document.getElementById("new-res-phone").value;
+          const room = document.getElementById("new-res-room").value,
+            name = document.getElementById("new-res-name").value,
+            phone = document.getElementById("new-res-phone").value;
           if (!room || !name) return alert("Nhập Căn hộ và Tên chủ hộ!");
-
           await addDoc(collection(db, "residents"), {
             building: userData.building,
             room,
@@ -263,28 +338,22 @@
             phone,
           });
           alert("Đã thêm Cư Dân!");
-          document.getElementById("new-res-room").value = "";
-          document.getElementById("new-res-name").value = "";
-          document.getElementById("new-res-phone").value = "";
           loadResidents();
         });
-
       async function loadResidents() {
-        const q = query(
-          collection(db, "residents"),
-          where("building", "==", userData.building),
+        const snap = await getDocs(
+          query(
+            collection(db, "residents"),
+            where("building", "==", userData.building),
+          ),
         );
-        const snap = await getDocs(q);
         const tbody = document.getElementById("residents-tbody");
         tbody.innerHTML = snap.empty
-          ? `<tr><td colspan="4" style="text-align: center;">Chưa có dữ liệu cư dân.</td></tr>`
+          ? `<tr><td colspan="4" style="text-align: center;">Chưa có dữ liệu.</td></tr>`
           : "";
         snap.forEach((d) => {
           const item = d.data();
-          tbody.innerHTML += `<tr>
-                    <td><strong style="color: #0f766e;">${item.room}</strong></td><td>${item.name}</td><td>${item.phone || "-"}</td>
-                    <td><button class="btn btn-outline btn-del-res" data-id="${d.id}" style="color: #ef4444; border-color: #ef4444; padding: 4px 8px; font-size: 0.8rem; width: auto;">Xóa</button></td>
-                </tr>`;
+          tbody.innerHTML += `<tr><td><strong style="color:#0f766e;">${item.room}</strong></td><td>${item.name}</td><td>${item.phone || "-"}</td><td><button class="btn btn-outline btn-del-res" data-id="${d.id}" style="color:#ef4444; border-color:#ef4444; padding:4px 8px; width:auto;">Xóa</button></td></tr>`;
         });
         document.querySelectorAll(".btn-del-res").forEach((btn) =>
           btn.addEventListener("click", async (e) => {
@@ -298,15 +367,13 @@
         );
       }
 
-      // --- QUẢN LÝ XE ---
       document
         .getElementById("btnAddVehicle")
         .addEventListener("click", async () => {
-          const room = document.getElementById("new-veh-room").value;
-          const plate = document.getElementById("new-veh-plate").value;
-          const type = document.getElementById("new-veh-type").value;
+          const room = document.getElementById("new-veh-room").value,
+            plate = document.getElementById("new-veh-plate").value,
+            type = document.getElementById("new-veh-type").value;
           if (!room || !plate) return alert("Nhập Căn hộ và Biển số!");
-
           await addDoc(collection(db, "vehicles"), {
             building: userData.building,
             room,
@@ -314,28 +381,22 @@
             type,
           });
           alert("Đã thêm Phương Tiện!");
-          document.getElementById("new-veh-room").value = "";
-          document.getElementById("new-veh-plate").value = "";
-          document.getElementById("new-veh-type").value = "";
           loadVehicles();
         });
-
       async function loadVehicles() {
-        const q = query(
-          collection(db, "vehicles"),
-          where("building", "==", userData.building),
+        const snap = await getDocs(
+          query(
+            collection(db, "vehicles"),
+            where("building", "==", userData.building),
+          ),
         );
-        const snap = await getDocs(q);
         const tbody = document.getElementById("vehicles-tbody");
         tbody.innerHTML = snap.empty
           ? `<tr><td colspan="4" style="text-align: center;">Chưa có phương tiện.</td></tr>`
           : "";
         snap.forEach((d) => {
           const item = d.data();
-          tbody.innerHTML += `<tr>
-                    <td><strong>${item.room}</strong></td><td><strong style="color: var(--primary-color);">${item.plate}</strong></td><td>${item.type || "-"}</td>
-                    <td><button class="btn btn-outline btn-del-veh" data-id="${d.id}" style="color: #ef4444; border-color: #ef4444; padding: 4px 8px; font-size: 0.8rem; width: auto;">Xóa</button></td>
-                </tr>`;
+          tbody.innerHTML += `<tr><td><strong>${item.room}</strong></td><td><strong style="color:var(--primary-color);">${item.plate}</strong></td><td>${item.type || "-"}</td><td><button class="btn btn-outline btn-del-veh" data-id="${d.id}" style="color:#ef4444; border-color:#ef4444; padding:4px 8px; width:auto;">Xóa</button></td></tr>`;
         });
         document.querySelectorAll(".btn-del-veh").forEach((btn) =>
           btn.addEventListener("click", async (e) => {
@@ -349,27 +410,84 @@
         );
       }
 
-      // --- BÁO HỎNG (GIỮ NGUYÊN) ---
-      async function loadReports() {
-        const q = query(
-          collection(db, "reports"),
-          where("building", "==", userData.building),
+      // --- TÍNH NĂNG MỚI: HÓA ĐƠN ---
+      document
+        .getElementById("btnCreateBill")
+        .addEventListener("click", async () => {
+          const room = document.getElementById("bill-room").value;
+          const fee = document.getElementById("bill-fee").value;
+          const parking = document.getElementById("bill-parking").value;
+          if (!room || !fee)
+            return alert("Vui lòng nhập Căn hộ và Phí quản lý!");
+
+          await addDoc(collection(db, "apartment_bills"), {
+            building: userData.building,
+            room: room,
+            fee: Number(fee),
+            parking: Number(parking) || 0,
+            total: Number(fee) + (Number(parking) || 0),
+            date: new Date().toLocaleDateString("vi-VN"),
+            status: "Chưa thanh toán",
+          });
+          alert("Đã phát hóa đơn lên hệ thống thành công!");
+          document.getElementById("bill-room").value = "";
+          document.getElementById("bill-fee").value = "";
+          document.getElementById("bill-parking").value = "";
+          loadBills();
+        });
+
+      async function loadBills() {
+        const snap = await getDocs(
+          query(
+            collection(db, "apartment_bills"),
+            where("building", "==", userData.building),
+          ),
         );
-        const snap = await getDocs(q);
+        const tbody = document.getElementById("bills-tbody");
+        tbody.innerHTML = snap.empty
+          ? `<tr><td colspan="5" style="text-align: center;">Chưa phát hóa đơn nào.</td></tr>`
+          : "";
+        snap.forEach((d) => {
+          const item = d.data();
+          tbody.innerHTML += `<tr>
+                    <td><strong>${item.room}</strong></td><td>${item.date}</td>
+                    <td><strong style="color: #ef4444;">${item.total.toLocaleString("vi-VN")} đ</strong></td>
+                    <td><span class="badge" style="background:#fef3c7; color:#d97706;">${item.status}</span></td>
+                    <td><button class="btn btn-outline btn-del-bill" data-id="${d.id}" style="color:#ef4444; border-color:#ef4444; padding:4px 8px; width:auto;">Xóa Bill</button></td>
+                </tr>`;
+        });
+        document.querySelectorAll(".btn-del-bill").forEach((btn) =>
+          btn.addEventListener("click", async (e) => {
+            if (confirm("Hủy hóa đơn này?")) {
+              await deleteDoc(
+                doc(db, "apartment_bills", e.target.getAttribute("data-id")),
+              );
+              loadBills();
+            }
+          }),
+        );
+      }
+
+      // --- BÁO HỎNG ---
+      async function loadReports() {
+        const snap = await getDocs(
+          query(
+            collection(db, "reports"),
+            where("building", "==", userData.building),
+          ),
+        );
         const tbody = document.getElementById("reports-tbody");
         tbody.innerHTML = snap.empty
           ? `<tr><td colspan="5" style="text-align: center;">Chưa có báo cáo.</td></tr>`
           : "";
         snap.forEach((docSnap) => {
           const item = docSnap.data();
-          tbody.innerHTML += `<tr>
-                    <td><strong>${item.room}</strong></td><td>${item.date}</td><td><strong>${item.type}</strong></td><td>${item.description}</td>
+          tbody.innerHTML += `<tr><td><strong>${item.room}</strong></td><td>${item.date}</td><td><strong>${item.type}</strong></td><td>${item.description}</td>
                     <td><select class="status-select" data-id="${docSnap.id}">
                         <option value="Tiếp nhận" ${item.status === "Tiếp nhận" ? "selected" : ""}>Tiếp nhận</option>
                         <option value="Đang sửa" ${item.status === "Đang sửa" ? "selected" : ""}>Đang sửa</option>
                         <option value="Hoàn thành" ${item.status === "Hoàn thành" ? "selected" : ""}>Hoàn thành</option>
-                    </select></td>
-                </tr>`;
+                    </select></td></tr>`;
         });
         document.querySelectorAll(".status-select").forEach((sel) =>
           sel.addEventListener("change", async (e) => {

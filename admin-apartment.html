@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>BQL Chung Cư</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="dashboard-layout">
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <i class="fas fa-city"></i> BQL Chung Cư
+        </div>
+        <ul class="nav-menu">
+          <li class="active">
+            <a href="#" onclick="switchTab('tab-cudan', this)"
+              ><i class="fas fa-users"></i> Quản lý Cư Dân</a
+            >
+          </li>
+          <li>
+            <a href="#" onclick="switchTab('tab-xe', this)"
+              ><i class="fas fa-car"></i> Quản lý Bãi Xe</a
+            >
+          </li>
+          <li>
+            <a href="#" onclick="switchTab('tab-baohong', this)"
+              ><i class="fas fa-wrench"></i> Yêu cầu hỗ trợ</a
+            >
+          </li>
+        </ul>
+      </aside>
+      <main class="main-content">
+        <header class="topbar">
+          <h2 id="building-display" style="font-size: 1.1rem">
+            Hệ thống Tòa nhà
+          </h2>
+          <div style="display: flex; align-items: center; gap: 15px">
+            <span id="admin-name" style="font-weight: 600; font-size: 0.9rem"
+              >BQL Admin</span
+            >
+            <button
+              class="btn btn-outline logout-btn"
+              style="padding: 5px 10px; font-size: 0.85rem; width: auto"
+            >
+              Đăng xuất
+            </button>
+          </div>
+        </header>
+
+        <div class="container" style="padding-top: 20px">
+          <div id="tab-cudan" class="content-section">
+            <div
+              class="card"
+              style="
+                margin-bottom: 20px;
+                background: var(--bg-light);
+                border: 1px dashed #0f766e;
+              "
+            >
+              <h3 style="margin-bottom: 15px; color: #0f766e">
+                <i class="fas fa-user-plus"></i> Thêm Cư Dân Mới
+              </h3>
+              <div style="display: flex; gap: 15px">
+                <input
+                  type="text"
+                  id="new-res-room"
+                  placeholder="Căn hộ (VD: 301)"
+                />
+                <input type="text" id="new-res-name" placeholder="Tên chủ hộ" />
+                <input
+                  type="text"
+                  id="new-res-phone"
+                  placeholder="Số điện thoại"
+                />
+              </div>
+              <button
+                id="btnAddResident"
+                class="btn btn-primary"
+                style="background: #0f766e; width: auto"
+              >
+                Lưu Cư Dân
+              </button>
+            </div>
+
+            <div class="card">
+              <h3 style="margin-bottom: 15px">Danh sách Cư Dân Tòa Nhà</h3>
+              <div class="table-responsive">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Căn hộ</th>
+                      <th>Tên Chủ Hộ</th>
+                      <th>Số điện thoại</th>
+                      <th>Thao tác</th>
+                    </tr>
+                  </thead>
+                  <tbody id="residents-tbody">
+                    <tr>
+                      <td colspan="4" style="text-align: center">
+                        Đang kéo dữ liệu...
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div id="tab-xe" class="content-section" style="display: none">
+            <div
+              class="card"
+              style="
+                margin-bottom: 20px;
+                background: var(--bg-light);
+                border: 1px dashed var(--primary-color);
+              "
+            >
+              <h3 style="margin-bottom: 15px; color: var(--primary-color)">
+                <i class="fas fa-motorcycle"></i> Đăng ký Biển số xe
+              </h3>
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: 1fr 1fr 1fr;
+                  gap: 15px;
+                "
+              >
+                <input
+                  type="text"
+                  id="new-veh-room"
+                  placeholder="Căn hộ (VD: 301)"
+                />
+                <input
+                  type="text"
+                  id="new-veh-plate"
+                  placeholder="Biển số (VD: 29A1-123.45)"
+                />
+                <input
+                  type="text"
+                  id="new-veh-type"
+                  placeholder="Loại xe (VD: Honda Vision)"
+                />
+              </div>
+              <button
+                id="btnAddVehicle"
+                class="btn btn-primary"
+                style="width: auto"
+              >
+                Thêm Phương Tiện
+              </button>
+            </div>
+
+            <div class="card">
+              <h3 style="margin-bottom: 15px">
+                Danh sách Phương tiện Đã Đăng ký
+              </h3>
+              <div class="table-responsive">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Căn hộ</th>
+                      <th>Biển số</th>
+                      <th>Loại xe</th>
+                      <th>Thao tác</th>
+                    </tr>
+                  </thead>
+                  <tbody id="vehicles-tbody">
+                    <tr>
+                      <td colspan="4" style="text-align: center">
+                        Đang kéo dữ liệu...
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div id="tab-baohong" class="content-section" style="display: none">
+            <div class="card">
+              <h3 style="margin-bottom: 15px">
+                Yêu cầu hỗ trợ từ Cư dân (Realtime)
+              </h3>
+              <div class="table-responsive">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Căn hộ</th>
+                      <th>Ngày gửi</th>
+                      <th>Loại sự cố</th>
+                      <th>Chi tiết</th>
+                      <th>Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody id="reports-tbody">
+                    <tr>
+                      <td colspan="5" style="text-align: center">
+                        Đang kéo dữ liệu...
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script type="module">
+      import { auth, db } from "./js/firebase.js";
+      import {
+        onAuthStateChanged,
+        signOut,
+      } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+      import {
+        doc,
+        getDoc,
+        collection,
+        getDocs,
+        query,
+        where,
+        updateDoc,
+        addDoc,
+        deleteDoc,
+      } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+      let userData = null;
+
+      onAuthStateChanged(auth, async (user) => {
+        if (!user) return (window.location.href = "login.html");
+        const d = await getDoc(doc(db, "users", user.uid));
+        userData = d.data();
+        document.getElementById("admin-name").innerText =
+          userData.name || "BQL Admin";
+
+        loadReports();
+        loadResidents();
+        loadVehicles();
+      });
+
+      document
+        .querySelector(".logout-btn")
+        .addEventListener("click", () => signOut(auth));
+
+      // --- QUẢN LÝ CƯ DÂN ---
+      document
+        .getElementById("btnAddResident")
+        .addEventListener("click", async () => {
+          const room = document.getElementById("new-res-room").value;
+          const name = document.getElementById("new-res-name").value;
+          const phone = document.getElementById("new-res-phone").value;
+          if (!room || !name) return alert("Nhập Căn hộ và Tên chủ hộ!");
+
+          await addDoc(collection(db, "residents"), {
+            building: userData.building,
+            room,
+            name,
+            phone,
+          });
+          alert("Đã thêm Cư Dân!");
+          document.getElementById("new-res-room").value = "";
+          document.getElementById("new-res-name").value = "";
+          document.getElementById("new-res-phone").value = "";
+          loadResidents();
+        });
+
+      async function loadResidents() {
+        const q = query(
+          collection(db, "residents"),
+          where("building", "==", userData.building),
+        );
+        const snap = await getDocs(q);
+        const tbody = document.getElementById("residents-tbody");
+        tbody.innerHTML = snap.empty
+          ? `<tr><td colspan="4" style="text-align: center;">Chưa có dữ liệu cư dân.</td></tr>`
+          : "";
+        snap.forEach((d) => {
+          const item = d.data();
+          tbody.innerHTML += `<tr>
+                    <td><strong style="color: #0f766e;">${item.room}</strong></td><td>${item.name}</td><td>${item.phone || "-"}</td>
+                    <td><button class="btn btn-outline btn-del-res" data-id="${d.id}" style="color: #ef4444; border-color: #ef4444; padding: 4px 8px; font-size: 0.8rem; width: auto;">Xóa</button></td>
+                </tr>`;
+        });
+        document.querySelectorAll(".btn-del-res").forEach((btn) =>
+          btn.addEventListener("click", async (e) => {
+            if (confirm("Xóa cư dân này?")) {
+              await deleteDoc(
+                doc(db, "residents", e.target.getAttribute("data-id")),
+              );
+              loadResidents();
+            }
+          }),
+        );
+      }
+
+      // --- QUẢN LÝ XE ---
+      document
+        .getElementById("btnAddVehicle")
+        .addEventListener("click", async () => {
+          const room = document.getElementById("new-veh-room").value;
+          const plate = document.getElementById("new-veh-plate").value;
+          const type = document.getElementById("new-veh-type").value;
+          if (!room || !plate) return alert("Nhập Căn hộ và Biển số!");
+
+          await addDoc(collection(db, "vehicles"), {
+            building: userData.building,
+            room,
+            plate,
+            type,
+          });
+          alert("Đã thêm Phương Tiện!");
+          document.getElementById("new-veh-room").value = "";
+          document.getElementById("new-veh-plate").value = "";
+          document.getElementById("new-veh-type").value = "";
+          loadVehicles();
+        });
+
+      async function loadVehicles() {
+        const q = query(
+          collection(db, "vehicles"),
+          where("building", "==", userData.building),
+        );
+        const snap = await getDocs(q);
+        const tbody = document.getElementById("vehicles-tbody");
+        tbody.innerHTML = snap.empty
+          ? `<tr><td colspan="4" style="text-align: center;">Chưa có phương tiện.</td></tr>`
+          : "";
+        snap.forEach((d) => {
+          const item = d.data();
+          tbody.innerHTML += `<tr>
+                    <td><strong>${item.room}</strong></td><td><strong style="color: var(--primary-color);">${item.plate}</strong></td><td>${item.type || "-"}</td>
+                    <td><button class="btn btn-outline btn-del-veh" data-id="${d.id}" style="color: #ef4444; border-color: #ef4444; padding: 4px 8px; font-size: 0.8rem; width: auto;">Xóa</button></td>
+                </tr>`;
+        });
+        document.querySelectorAll(".btn-del-veh").forEach((btn) =>
+          btn.addEventListener("click", async (e) => {
+            if (confirm("Hủy đăng ký xe này?")) {
+              await deleteDoc(
+                doc(db, "vehicles", e.target.getAttribute("data-id")),
+              );
+              loadVehicles();
+            }
+          }),
+        );
+      }
+
+      // --- BÁO HỎNG (GIỮ NGUYÊN) ---
+      async function loadReports() {
+        const q = query(
+          collection(db, "reports"),
+          where("building", "==", userData.building),
+        );
+        const snap = await getDocs(q);
+        const tbody = document.getElementById("reports-tbody");
+        tbody.innerHTML = snap.empty
+          ? `<tr><td colspan="5" style="text-align: center;">Chưa có báo cáo.</td></tr>`
+          : "";
+        snap.forEach((docSnap) => {
+          const item = docSnap.data();
+          tbody.innerHTML += `<tr>
+                    <td><strong>${item.room}</strong></td><td>${item.date}</td><td><strong>${item.type}</strong></td><td>${item.description}</td>
+                    <td><select class="status-select" data-id="${docSnap.id}">
+                        <option value="Tiếp nhận" ${item.status === "Tiếp nhận" ? "selected" : ""}>Tiếp nhận</option>
+                        <option value="Đang sửa" ${item.status === "Đang sửa" ? "selected" : ""}>Đang sửa</option>
+                        <option value="Hoàn thành" ${item.status === "Hoàn thành" ? "selected" : ""}>Hoàn thành</option>
+                    </select></td>
+                </tr>`;
+        });
+        document.querySelectorAll(".status-select").forEach((sel) =>
+          sel.addEventListener("change", async (e) => {
+            await updateDoc(
+              doc(db, "reports", e.target.getAttribute("data-id")),
+              { status: e.target.value },
+            );
+          }),
+        );
+      }
+
+      window.switchTab = function (tabId, element) {
+        document
+          .querySelectorAll(".content-section")
+          .forEach((sec) => (sec.style.display = "none"));
+        document
+          .querySelectorAll(".nav-menu li")
+          .forEach((li) => li.classList.remove("active"));
+        document.getElementById(tabId).style.display = "block";
+        element.parentElement.classList.add("active");
+      };
+    </script>
+  </body>
+</html>
